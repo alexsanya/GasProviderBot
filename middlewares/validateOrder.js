@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import getLogger from 'pino'
+import { account } from '../config.js'
 import { viemClient, keccak256 } from '../services/viemClient.js'
 import gasBrokerABI from '../resources/gasBrokerABI.json' assert { type: 'json' }
 import aggregatorV3InterfaceAbi from '../resources/aggregatorV3InterfaceABI.json' assert { type: 'json' }
@@ -11,7 +12,6 @@ import {
   ACCOUNT_ADDRESS_REGEX,
   SIGNATURE_REGEX,
   GAS_BROKER_ADDRESS,
-  GAS_PROVIDER_ADDRESS,
   CHAINLINK_MATIC_USD_FEED
 } from '../config.js' 
 
@@ -36,15 +36,17 @@ export function splitSignature(signatureHex) {
   ]
 }
 
-function simulate(args, valueParam) {
-  return viemClient.simulateContract({
+async function simulate(args, valueParam) {
+   const result = await viemClient.simulateContract({
     address: GAS_BROKER_ADDRESS,
     abi: gasBrokerABI,
     functionName: 'swap', 
-    account: GAS_PROVIDER_ADDRESS,
+    account,
     args,
     value: valueParam
   })
+
+  return result.request
 }
 
 async function estimateGas(args, valueParam) {
@@ -53,7 +55,7 @@ async function estimateGas(args, valueParam) {
       address: GAS_BROKER_ADDRESS,
       abi: gasBrokerABI,
       functionName: 'swap', 
-      account: GAS_PROVIDER_ADDRESS,
+      account,
       value: valueParam,
       args
     })
@@ -82,7 +84,7 @@ async function handler(req, res) {
 
   const permitHash = keccak256(permitSignature)
   const logger = getLogger({ msgPrefix: `[validator][${permitHash.slice(0,10)}] ` })
-  logger.info('Order passed validation')
+  logger.info('Order format is correct')
   logger.info(response.data)
 
   const args = [
@@ -100,7 +102,7 @@ async function handler(req, res) {
   ]
 
   const gasProviderBalance = await viemClient.getBalance({ 
-    address: GAS_PROVIDER_ADDRESS
+    address: account.address
   })
 
   logger.info(`Gas provider balance: ${gasProviderBalance}`)
@@ -114,7 +116,7 @@ async function handler(req, res) {
 
 
   try {
-    await simulate(args, valueParam)
+    req.transaction = await simulate(args, valueParam)
     req.args = args
     req.permitHash = permitHash
     logger.info('Order is valid')
@@ -127,7 +129,12 @@ async function handler(req, res) {
     const usdCost = Number(maticRequired / 10n**15n) * maticPrice / 1000
     logger.info(`Comission: $${reward / 10**6} Transaction cost: $${usdCost} Profit: $${reward / 10**6 - usdCost}`)
 
-    if (usdCost * PROFIT_FACTOR > reward) {
+
+    logger.info(`usdCost * PROFIT_FACTOR: ${usdCost * PROFIT_FACTOR }`)
+    logger.info(`reward / 10**6: ${reward / 10**6}`)
+
+
+    if (usdCost * PROFIT_FACTOR > reward / 10**6) {
       logger.info('Order is not profitable and will be skipped')
       throw new Error('Not profitable')
     }
