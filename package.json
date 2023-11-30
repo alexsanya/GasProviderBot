@@ -1,0 +1,14 @@
+{
+  "name": "gas-provider-bot",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "pino": "^8.16.2",
+    "restify": "^11.1.0",
+    "restify-pino-logger": "^3.0.0",
+    "viem": "^1.19.9",
+    "zod": "^3.22.4"
+  }
+}
