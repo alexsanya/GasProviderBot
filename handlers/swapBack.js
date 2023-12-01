@@ -1,6 +1,6 @@
 import getLogger from 'pino'
 import { viemClient } from '../services/viemClient.js'
-import { getTokenBalance, sendSurplusToColdWallet } from '../services/chainUtils.js'
+import { getTokenBalance, sendSurplusToColdWallet, swapTokensToGas } from '../services/chainUtils.js'
 import { account, USDC_ADDRESS, USDC_TRESHOLD, USDC_DECIMALS_RATIO, GAS_TRESHOLD } from '../config.js'
 
 async function handler(_, res) {
@@ -10,7 +10,8 @@ async function handler(_, res) {
   logger.info(`Token balance is: ${tokenBalance}`)
 
   if (tokenBalance > USDC_TRESHOLD * USDC_DECIMALS_RATIO) {
-    await swapTokensToGas()
+    await swapTokensToGas(tokenBalance)
+    logger.info('SwapBack is completed')
   }
 
   const gasBalance = await viemClient.getBalance({ 
