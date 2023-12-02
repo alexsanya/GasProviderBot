@@ -2,9 +2,12 @@ import { parseAbi } from 'viem'
 import {
   account,
   COLD_WALLET_ADDRESS,
-  OPERATIONAL_BALANCE
+  OPERATIONAL_BALANCE,
+  GAS_PROVIDER_HELPER_ADDRESS,
+  USDC_ADDRESS
 } from '../config.js'
 import { viemClient, walletClient } from './viemClient.js'
+import gasProviderHelperAbi from '../resources/gasProviderHelperAbi.json' assert { type: 'json' }
 
 const erc20abi = parseAbi([
   'function balanceOf(address owner) view returns (uint256)'
@@ -34,10 +37,14 @@ export async function sendSurplusToColdWallet(gasBalance) {
 }
 
 export async function swapTokensToGas() {
-  //const { request } = await viemClient.simulateContract({
-  //  address: GAS_PROVIDER_HELPER_ADDRESS,
-  //  abi: gasProviderHelperAbi,
-  //  functionName: 'swapBack',
-  //})
-  //await walletClient.writeContract(request)
+  const { request } = await viemClient.simulateContract({
+    address: GAS_PROVIDER_HELPER_ADDRESS,
+    abi: gasProviderHelperAbi,
+    functionName: 'swapTokensForGas',
+    account,
+    args: [
+      USDC_ADDRESS
+    ]
+  })
+  await walletClient.writeContract(request)
 }
