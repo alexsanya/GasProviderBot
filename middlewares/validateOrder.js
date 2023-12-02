@@ -3,7 +3,7 @@ import getLogger from 'pino'
 import { account } from '../config.js'
 import { viemClient, keccak256 } from '../services/viemClient.js'
 import gasBrokerABI from '../resources/gasBrokerABI.json' assert { type: 'json' }
-import aggregatorV3InterfaceAbi from '../resources/aggregatorV3InterfaceABI.json' assert { type: 'json' }
+import aggregatorV3InterfaceAbi from '../resources/aggregatorV3InterfaceAbi.json' assert { type: 'json' }
 
 import {
   NETWORK_ID,
@@ -43,7 +43,8 @@ async function simulate(args, valueParam) {
     functionName: 'swap', 
     account,
     args,
-    value: valueParam
+    value: valueParam,
+    gas: 500000n
   })
 
   return result.request
@@ -72,7 +73,7 @@ async function getMaticPrice() {
 
 async function handler(req, res) {
 
-  const response = schema.safeParse(req.body);
+  const response = schema.safeParse(req.body.record);
   if (!response.success) {
     res.send(400, response.error.errors)
     throw new Error('invalid order')
