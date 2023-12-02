@@ -12,7 +12,7 @@ async function handler(req, res) {
       address: account.address
     })
     logger.info(`Gas provider balance: ${balance}`)
-    res.send(200, { hash})
+    res.send(200, { hash })
   } catch (error) {
     logger.error('Transaction failed', error)
     logger.error(error)
