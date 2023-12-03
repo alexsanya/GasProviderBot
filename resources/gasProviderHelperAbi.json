@@ -90,7 +90,13 @@
         }
       ],
       "name": "swapWithFlashloan",
-      "outputs": [],
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "balanceAfter",
+          "type": "uint256"
+        }
+      ],
       "stateMutability": "payable",
       "type": "function"
     },
