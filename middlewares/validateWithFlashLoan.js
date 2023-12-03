@@ -34,7 +34,6 @@ async function evaluate(logger, valueToSend, swapArgs) {
       valueParam,
       swapCalldata
     ],
-    value: valueParam,
     gas: GAS_LIMIT
   }
 

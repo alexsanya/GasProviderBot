@@ -3,7 +3,7 @@ import {
   CHAINLINK_MATIC_USD_FEED
 } from '../config.js' 
 import { viemClient } from '../services/viemClient.js'
-import aggregatorV3InterfaceAbi from '../resources/aggregatorV3InterfaceABI.json' assert { type: 'json' }
+import aggregatorV3InterfaceAbi from '../resources/aggregatorV3InterfaceAbi.json' assert { type: 'json' }
 
 export function splitSignature(signatureHex) {
   const rawSig = signatureHex.split('x')[1]

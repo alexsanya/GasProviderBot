@@ -24,7 +24,7 @@ const schema = z.object({
 
 async function handler(req, res) {
 
-  const response = schema.safeParse(req.body);
+  const response = schema.safeParse(req.body.record);
   if (!response.success) {
     res.send(400, response.error.errors)
     throw new Error('invalid order')
