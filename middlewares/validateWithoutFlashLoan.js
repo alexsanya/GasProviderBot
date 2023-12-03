@@ -4,6 +4,7 @@ import { viemClient } from '../services/viemClient.js'
 import gasBrokerABI from '../resources/gasBrokerABI.json' assert { type: 'json' }
 
 import {
+  GAS_LIMIT,
   PROFIT_FACTOR,
   GAS_BROKER_ADDRESS,
 } from '../config.js' 
@@ -17,7 +18,8 @@ async function handler(req, res) {
       functionName: 'swap', 
       account,
       args: req.swapArgs,
-      value: valueParam
+      value: valueParam,
+      gas: GAS_LIMIT
     })
 
     return result.request

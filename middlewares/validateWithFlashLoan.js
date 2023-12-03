@@ -9,7 +9,8 @@ import {
   PROFIT_FACTOR,
   USDC_ADDRESS,
   UNISWAP_USDC_WMATIC_POOL_ADDRESS,
-  GAS_PROVIDER_HELPER_ADDRESS
+  GAS_PROVIDER_HELPER_ADDRESS,
+  GAS_LIMIT
 } from '../config.js' 
 
 async function evaluate(logger, valueToSend, swapArgs) {
@@ -33,7 +34,8 @@ async function evaluate(logger, valueToSend, swapArgs) {
       valueParam,
       swapCalldata
     ],
-    value: valueParam
+    value: valueParam,
+    gas: GAS_LIMIT
   }
 
 
