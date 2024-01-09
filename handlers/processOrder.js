@@ -16,9 +16,6 @@ async function handler(req) {
     logger.error('Transaction failed', error)
     logger.error(error)
   }
-
-
-  next();
 }
 
 export default handler
