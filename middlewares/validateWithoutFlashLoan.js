@@ -10,7 +10,7 @@ import {
 } from '../config.js' 
 
 
-async function handler(req, res) {
+async function handler(req) {
   async function simulate(valueParam) {
      const result = await viemClient.simulateContract({
       address: GAS_BROKER_ADDRESS,
@@ -68,7 +68,6 @@ async function handler(req, res) {
     }
   } catch (error) {
     logger.error(error)
-    res.send(400, error)
     throw new Error('invalid order')
   }
 

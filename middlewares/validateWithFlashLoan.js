@@ -51,7 +51,7 @@ async function evaluate(logger, valueToSend, swapArgs) {
 
 }
 
-async function handler(req, res) {
+async function handler(req) {
   if (!req.useFlashLoan) {
     return;
   }
@@ -73,7 +73,6 @@ async function handler(req, res) {
     logger.info(`Estimated profit: $${profitInUsd}`)
   } catch (error) {
     logger.error(error)
-    res.send(400, error)
     throw new Error('invalid order')
   }
 

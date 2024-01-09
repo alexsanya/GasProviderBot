@@ -22,11 +22,10 @@ const schema = z.object({
   rewardSignature: z.string().regex(SIGNATURE_REGEX)
 })
 
-async function handler(req, res) {
+async function handler(req) {
 
-  const response = schema.safeParse(req.body.record);
+  const response = schema.safeParse(req.body);
   if (!response.success) {
-    res.send(400, response.error.errors)
     throw new Error('invalid order')
   }
   req.order = response.data

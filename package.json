@@ -8,6 +8,7 @@
     "pino": "^8.16.2",
     "restify": "^11.1.0",
     "restify-pino-logger": "^3.0.0",
+    "socket.io-client": "^4.7.3",
     "viem": "^1.19.9",
     "zod": "^3.22.4"
   }
