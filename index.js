@@ -67,6 +67,11 @@ function run() {
   server.use(restify.plugins.bodyParser())
   server.post('/swap_back', swapBack);
 
+  server.listen(PORT, function() {
+    logger.info('%s listening at %s', server.name, server.url);
+  });
+
+
 }
 
 run()
