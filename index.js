@@ -19,8 +19,12 @@ async function processPipeline(entity, stages) {
     body: entity
   }
   
-  for (let i=0; i < stages.length; i++) {
-    await stages[i](req)
+  try {
+    for (let i=0; i < stages.length; i++) {
+      await stages[i](req)
+    }
+  } catch (error) {
+    logger.error('Order is skipped', error)
   }
 }
 
