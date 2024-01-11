@@ -55,6 +55,7 @@ async function handler(req) {
   if (!req.useFlashLoan) {
     return;
   }
+  throw new Error('Flash loan is not implemented')
 
   const logger = getLogger({ msgPrefix: `[validate][withFlashLoan][${req.permitHash.slice(0,10)}] ` })
 

@@ -33,11 +33,11 @@ async function handler(req) {
   const { value, reward, token, permitSignature } = response.data
   const permitHash = keccak256(permitSignature)
   req.permitHash = permitHash
-  const logger = getLogger({ msgPrefix: `[perValidation][${permitHash.slice(0,10)}] ` })
+  const logger = getLogger({ msgPrefix: `[preValidation][${permitHash.slice(0,10)}] ` })
   logger.info(response.data)
   logger.info('Order format is correct')
 
-  const tokenAmount = BigInt(value) - BigInt(reward)
+  const tokenAmount = value - reward
   if (tokenAmount < 0 ) {
     logger.error('Reward exceeds value')
     throw new Error('invalid order')

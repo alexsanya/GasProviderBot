@@ -2,7 +2,7 @@ import { createPublicClient, defineChain, http } from 'viem'
 export { keccak256 } from 'viem'
 
 export const localFork = defineChain({
-  id: 137,
+  id: 324,
   name: 'Local',
   network: 'local',
   nativeCurrency: {

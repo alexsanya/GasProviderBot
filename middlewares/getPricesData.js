@@ -1,9 +1,6 @@
 import getLogger from 'pino'
-import {
-  CHAINLINK_MATIC_USD_FEED
-} from '../config.js' 
+import { getEthPrice } from '../services/chainUtils.js'
 import { viemClient } from '../services/viemClient.js'
-import aggregatorV3InterfaceAbi from '../resources/aggregatorV3InterfaceAbi.json' assert { type: 'json' }
 
 export function splitSignature(signatureHex) {
   const rawSig = signatureHex.split('x')[1]
@@ -12,15 +9,6 @@ export function splitSignature(signatureHex) {
     `0x${rawSig.slice(0,64)}`, 
     `0x${rawSig.slice(64,-2)}`
   ]
-}
-
-async function getMaticPrice() {
-  const [_, price] = await viemClient.readContract({
-    address: CHAINLINK_MATIC_USD_FEED,
-    abi: aggregatorV3InterfaceAbi,
-    functionName: 'latestRoundData',
-  })
-  return Number(price / 10n**4n) / 10**4
 }
 
 async function handler(req) {
@@ -43,7 +31,7 @@ async function handler(req) {
   ]
 
   const [maticPrice, gasPrice] = await Promise.all([
-    getMaticPrice(),
+    getEthPrice(),
     viemClient.getGasPrice() 
   ])
 

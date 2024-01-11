@@ -6,6 +6,7 @@ import gasBrokerABI from '../resources/gasBrokerABI.json' assert { type: 'json' 
 import {
   GAS_LIMIT,
   PROFIT_FACTOR,
+  SWAP_GAS_REQUIRED,
   GAS_BROKER_ADDRESS,
 } from '../config.js' 
 
@@ -25,18 +26,6 @@ async function handler(req) {
     return result.request
   }
 
-  async function estimateGas(valueParam) {
-
-    return viemClient.estimateContractGas({
-        address: GAS_BROKER_ADDRESS,
-        abi: gasBrokerABI,
-        functionName: 'swap', 
-        account,
-        value: valueParam,
-        args: req.swapArgs
-      })
-  }
-
   async function evaluate(logger) {
     const valueParam = req.valueToSend + req.valueToSend / 3n
     logger.info(`Value param: ${valueParam}`)
@@ -44,10 +33,7 @@ async function handler(req) {
     req.transaction = await simulate(valueParam)
     logger.info('Order is valid')
 
-    const gasRequired = await estimateGas(valueParam)
-    logger.info(`Gas estimation: ${gasRequired}`)
-    return req.gasPrice * gasRequired
-
+    return req.gasPrice * SWAP_GAS_REQUIRED
   }
 
   if (req.useFlashLoan) {
@@ -59,6 +45,7 @@ async function handler(req) {
     const maticRequired = await evaluate(logger)
     logger.info(`MATIC price estimation: ${maticRequired}`)
     logger.info(`req.maticPrice: ${req.maticPrice}`)
+    logger.info(`req.gasPrice: ${req.gasPrice}`)
     const usdCost = Number(maticRequired / 10n**13n) * req.maticPrice / 100000
     const { reward } = req.order
     logger.info(`Comission: $${reward / 10**6} Transaction cost: $${usdCost} Profit: $${reward / 10**6 - usdCost}`)
