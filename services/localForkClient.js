@@ -2,7 +2,7 @@ import { createPublicClient, defineChain, http } from 'viem'
 export { keccak256 } from 'viem'
 
 export const localFork = defineChain({
-  id: 324,
+  id: 260,
   name: 'Local',
   network: 'local',
   nativeCurrency: {
@@ -12,7 +12,7 @@ export const localFork = defineChain({
   },
   rpcUrls: {
     default: {
-      http: ['http://127.0.0.1:8545']
+      http: ['http://127.0.0.1:8011']
     }
   }
 })

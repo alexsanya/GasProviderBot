@@ -7,7 +7,7 @@ import gasProviderHelperAbi from '../resources/gasProviderHelperAbi.json' assert
 
 import {
   PROFIT_FACTOR,
-  USDC_ADDRESS,
+  USDT_ADDRESS,
   UNISWAP_USDC_WMATIC_POOL_ADDRESS,
   GAS_PROVIDER_HELPER_ADDRESS,
   GAS_LIMIT
@@ -30,7 +30,7 @@ async function evaluate(logger, valueToSend, swapArgs) {
     account,
     args: [
       UNISWAP_USDC_WMATIC_POOL_ADDRESS,
-      USDC_ADDRESS,
+      USDT_ADDRESS,
       valueParam,
       swapCalldata
     ],

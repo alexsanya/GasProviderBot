@@ -1,6 +1,6 @@
 import { zkSync } from 'viem/chains'
 import { createPublicClient, createWalletClient, http } from 'viem'
-import { forkClient, localFork  } from './localForkClient.js'
+import { forkClient } from './localForkClient.js'
 export { keccak256 } from 'viem'
 
 
